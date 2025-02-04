@@ -7,10 +7,9 @@ const PropertySearchFormExtension = {
   render: ({ trace, element }) => {
     const formContainer = document.createElement("form");
 
-    // Define the updatePriceRanges function
     function updatePriceRanges(status) {
       const priceRangeSelect = formContainer.querySelector("#priceRange");
-      priceRangeSelect.innerHTML = ""; // Clear existing options
+      priceRangeSelect.innerHTML = "";
 
       const ranges =
         status === "Sale"
@@ -29,13 +28,11 @@ const PropertySearchFormExtension = {
               { value: "12000+", label: "$12,000 and above" },
             ];
 
-      // Add default option
       const defaultOption = document.createElement("option");
       defaultOption.value = "";
       defaultOption.textContent = "Select price range";
       priceRangeSelect.appendChild(defaultOption);
 
-      // Add price range options
       ranges.forEach((range) => {
         const option = document.createElement("option");
         option.value = range.value;
@@ -145,15 +142,6 @@ const PropertySearchFormExtension = {
           placeholder="Enter city"
         >
 
-        <label for="neighborhood">Neighborhood</label>
-        <input 
-          type="text" 
-          id="neighborhood" 
-          name="neighborhood" 
-          required
-          placeholder="Enter neighborhood"
-        >
-
         <label for="propertyStatus">Property Status</label>
         <select id="propertyStatus" name="propertyStatus" required>
           <option value="">Select status</option>
@@ -228,16 +216,13 @@ const PropertySearchFormExtension = {
       </div>
     `;
 
-    // Initialize price ranges based on default property status
     updatePriceRanges("Rent");
 
-    // Update price ranges when property status changes
     const propertyStatusSelect = formContainer.querySelector("#propertyStatus");
     propertyStatusSelect.addEventListener("change", function () {
       updatePriceRanges(this.value);
     });
 
-    // Handle form validation
     const inputs = formContainer.querySelectorAll(
       "input:not([type='checkbox']), select, textarea"
     );
@@ -252,10 +237,8 @@ const PropertySearchFormExtension = {
     formContainer.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      // Get all form values
       const formData = {
         city: formContainer.querySelector("#city").value,
-        neighborhood: formContainer.querySelector("#neighborhood").value,
         propertyStatus: formContainer.querySelector("#propertyStatus").value,
         homeType: formContainer.querySelector("#homeType").value,
         bedrooms: formContainer.querySelector("#bedrooms").value,
@@ -265,10 +248,8 @@ const PropertySearchFormExtension = {
         moveInDate: formContainer.querySelector("#moveInDate").value,
       };
 
-      // Log the form data for debugging
       console.log("Form Data:", formData);
 
-      // Validate all required fields
       let isValid = true;
       inputs.forEach((input) => {
         if (!input.checkValidity()) {
@@ -279,10 +260,8 @@ const PropertySearchFormExtension = {
 
       if (!isValid) return;
 
-      // Remove submit button after successful submission
       formContainer.querySelector(".submit-btn").remove();
 
-      // Send data back to Voiceflow
       window.voiceflow.chat.interact({
         type: "complete",
         payload: formData,
